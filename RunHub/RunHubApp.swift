@@ -40,26 +40,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         item.button?.target = self
         item.button?.action = #selector(togglePopover(_:))
         statusItem = item
-        updateIcon(active: isAnyActive(manager.runners))
+        updateIcon(busy: isAnyBusy(manager.runners))
 
         // Keep the menu bar icon in sync with runner status.
         manager.$runners
             .receive(on: RunLoop.main)
             .sink { [weak self] runners in
-                self?.updateIcon(active: self?.isAnyActive(runners) ?? false)
+                self?.updateIcon(busy: self?.isAnyBusy(runners) ?? false)
             }
             .store(in: &cancellables)
 
         manager.resumeDesiredRunning()
     }
 
-    private func isAnyActive(_ runners: [RunnerManager.Item]) -> Bool {
-        runners.contains { $0.status.isActive }
+    /// True when any runner is actively running a job (Busy).
+    private func isAnyBusy(_ runners: [RunnerManager.Item]) -> Bool {
+        runners.contains { if case .busy = $0.status { return true }; return false }
     }
 
-    /// Swap the status-item image between the Active and Inactive template assets.
-    private func updateIcon(active: Bool) {
-        let image = NSImage(named: active ? "Active" : "Inactive")
+    /// Swap the status-item image: Active while a job is running, else Inactive.
+    private func updateIcon(busy: Bool) {
+        let image = NSImage(named: busy ? "Active" : "Inactive")
         image?.isTemplate = true
         statusItem?.button?.image = image
     }
