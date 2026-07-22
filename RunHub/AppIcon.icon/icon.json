@@ -1,24 +1,70 @@
 {
-  "fill" : "automatic",
+  "fill" : {
+    "automatic-gradient" : "srgb:0.95686,0.95294,0.94510,1.00000"
+  },
   "groups" : [
+    {
+      "blur-material" : 0.5,
+      "hidden" : false,
+      "layers" : [
+        {
+          "fill" : {
+            "solid" : "extended-srgb:0.20392,0.78039,0.34902,1.00000"
+          },
+          "image-name" : "Layer-14.svg",
+          "name" : "Layer-14"
+        },
+        {
+          "fill" : {
+            "solid" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+          },
+          "image-name" : "Layer-13.svg",
+          "name" : "Layer-13"
+        },
+        {
+          "fill" : {
+            "solid" : "extended-srgb:1.00000,0.21961,0.23529,1.00000"
+          },
+          "image-name" : "Layer-12.svg",
+          "name" : "Layer-12"
+        }
+      ],
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "blur-material" : 0.5,
+      "layers" : [
+        {
+          "image-name" : "Layer-11.svg",
+          "name" : "Layer-11"
+        }
+      ],
+      "lighting" : "individual",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
     {
       "layers" : [
         {
-          "glass" : false,
-          "image-name" : "Full.svg",
-          "name" : "Full",
-          "position-specializations" : [
-            {
-              "idiom" : "square",
-              "value" : {
-                "scale" : 0.95,
-                "translation-in-points" : [
-                  0,
-                  0
-                ]
-              }
-            }
-          ]
+          "fill" : {
+            "automatic-gradient" : "extended-gray:0.25000,1.00000"
+          },
+          "image-name" : "Layer-00.svg",
+          "name" : "Layer-00"
         }
       ],
       "shadow" : {

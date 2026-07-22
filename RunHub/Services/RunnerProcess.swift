@@ -56,6 +56,11 @@ final class RunnerProcess: RunnerProcessing {
         proc.arguments = ["-e", "use POSIX; POSIX::setsid(); exec(@ARGV) or die $!;",
                           runScriptURL.path]
         proc.currentDirectoryURL = workingDirectory
+        // Hand the runner the user's login-shell environment. Without this it
+        // inherits RunHub's sparse Finder/LaunchServices env (PATH=/usr/bin:...),
+        // so job steps can't find Homebrew/nvm/rbenv tools - see
+        // LoginShellEnvironment for the full rationale.
+        proc.environment = LoginShellEnvironment.shared
 
         let pipe = Pipe()
         proc.standardOutput = pipe

@@ -3,7 +3,7 @@
 //  RunHub
 //
 //  The menu bar panel: runner list (or empty state), add-by-folder, all-runner
-//  controls, launch-at-login toggle, and quit.
+//  controls, and an overflow menu (version, GitHub link, launch-at-login, quit).
 //
 
 import SwiftUI
@@ -48,18 +48,44 @@ struct MenuContentView: View {
                     .disabled(manager.runners.isEmpty)
             }
 
-            Toggle("Launch RunHub at login", isOn: $launchAtLogin)
-                .onChange(of: launchAtLogin) { _, newValue in setLaunchAtLogin(newValue) }
-
             Divider()
 
-            Button("Quit RunHub") { NSApp.terminate(nil) }
+            HStack(alignment: .center) {
+                Text("RunHub \(appVersion)")
+                    .font(.caption)
+                    .bold()
+                    .opacity(0.75)
+                Spacer()
+                Menu {
+                    Link("View on GitHub", destination: projectURL)
+                    Divider()
+                    Toggle("Launch RunHub at login", isOn: $launchAtLogin)
+                    Divider()
+                    Button("Quit RunHub") { NSApp.terminate(nil) }
+                } label: {
+                    Image(systemName: "ellipsis")
+                }
+                .menuStyle(.borderlessButton)
+                .menuIndicator(.hidden)
+                .fixedSize()
+                .accessibilityLabel("More options")
+            }
         }
         .padding(12)
         .frame(width: 340)
         .onAppear { launchAtLogin = loginItem.isEnabled }
+        .onChange(of: launchAtLogin) { _, newValue in setLaunchAtLogin(newValue) }
         .task { await manager.refreshEnrichment() }
     }
+
+    /// Marketing version shown in the overflow menu, read from the app bundle
+    /// (CFBundleShortVersionString == MARKETING_VERSION, e.g. "1.0.1").
+    private var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+    }
+
+    /// The project's GitHub page, opened from the overflow menu.
+    private let projectURL = URL(string: "https://github.com/yumaitau/RunHub")!
 
     private func addRunner() {
         manager.lastMessage = nil

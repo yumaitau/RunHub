@@ -32,6 +32,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var cancellables = Set<AnyCancellable>()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Pre-warm the login-shell environment capture off the main thread so the
+        // first runner launch (incl. launch-time auto-resume below) never blocks
+        // the UI on shell startup.
+        Task.detached(priority: .utility) { _ = LoginShellEnvironment.shared }
+
         popover.behavior = .transient
         popover.contentViewController = NSHostingController(
             rootView: MenuContentView(manager: manager))
