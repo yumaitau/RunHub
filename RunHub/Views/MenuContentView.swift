@@ -11,6 +11,7 @@ import AppKit
 
 struct MenuContentView: View {
     @ObservedObject var manager: RunnerManager
+    @ObservedObject var updater: AppUpdater
     @StateObject private var loginItem = LoginItem()
 
     var body: some View {
@@ -49,6 +50,11 @@ struct MenuContentView: View {
 
             Divider()
 
+            if updater.updateAvailable {
+                Button("Update Available…") { updater.checkForUpdates() }
+                    .disabled(!updater.canCheckForUpdates)
+            }
+
             HStack(alignment: .center) {
                 Text("RunHub \(appVersion)")
                     .font(.caption)
@@ -57,6 +63,15 @@ struct MenuContentView: View {
                 Spacer()
                 Menu {
                     Link("View on GitHub", destination: projectURL)
+                    Button("Check for Updates…") { updater.checkForUpdates() }
+                        .disabled(!updater.canCheckForUpdates)
+                    Toggle("Automatically Check for Updates", isOn: Binding(
+                        get: { updater.automaticallyChecksForUpdates },
+                        set: { updater.setAutomaticallyChecksForUpdates($0) }))
+                    Toggle("Automatically Download Updates", isOn: Binding(
+                        get: { updater.automaticallyDownloadsUpdates },
+                        set: { updater.setAutomaticallyDownloadsUpdates($0) }))
+                        .disabled(!updater.automaticallyChecksForUpdates)
                     Divider()
                     Toggle("Launch RunHub at login", isOn: Binding(
                         get: { loginItem.isEnabled },

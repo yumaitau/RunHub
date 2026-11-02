@@ -6,7 +6,7 @@
 
 RunHub is a macOS menu bar app for managing self-hosted GitHub Actions runners.
 It adopts runners you have already configured and launches them inside your logged-in
-GUI session, keeping signing certificates, provisioning profiles, and notarization
+GUI session, keeping signing certificates, provisioning profiles, and notarisation
 credentials in the unlocked login Keychain available to jobs.
 
 ## Install
@@ -16,7 +16,7 @@ credentials in the unlocked login Keychain available to jobs.
 2. Extract the archive and move `RunHub.app` to your Applications folder.
 3. Open RunHub. Its icon appears in the menu bar rather than the Dock.
 
-Published builds are signed with a Developer ID certificate and notarized by Apple.
+Published builds are signed with a Developer ID certificate and notarised by Apple.
 
 ## Features
 
@@ -29,6 +29,7 @@ Published builds are signed with a Developer ID certificate and notarized by App
 - Warn before quitting while a job is running.
 - Optionally enrich local status with GitHub's authoritative status through `gh`.
 - Launch RunHub automatically when you log in.
+- Check for and install signed app updates with Sparkle.
 
 RunHub is a menu bar utility: it does not display a Dock icon or a conventional app
 window. Its menu bar icon becomes active while any runner is processing a job.
@@ -88,6 +89,21 @@ RunHub is intentionally not sandboxed because it must execute runner scripts, ma
 their descendant processes, read user-selected runner folders, and optionally invoke
 `gh`.
 
+Xcode resolves [Sparkle](https://sparkle-project.org/) through Swift Package Manager.
+Keep the resolved package file in source control so release builds use the tested version.
+
+## App updates
+
+RunHub checks for updates daily and downloads signed updates automatically. Sparkle
+installs downloaded updates when the app quits, or offers to install and relaunch.
+Use **Check for Updates…** in the overflow menu to check manually. The same menu lets
+you turn automatic checks and downloads on or off. An **Update Available…** button
+appears in the panel when Sparkle has an update awaiting attention.
+
+Update archives must be signed with RunHub's Sparkle key in addition to Apple code
+signing and notarisation. See [Releasing updates](docs/releases.md) for the release steps.
+Versions released before Sparkle was added require one manual download to gain updates.
+
 ## Usage
 
 1. Launch RunHub and click its icon in the menu bar.
@@ -133,7 +149,7 @@ before asking RunHub to supervise the same runner:
 Local runner status does not require a GitHub token. RunHub parses the standard output
 from `run.sh`, including `Listening for Jobs`, `Running job: <name>`, and job-completion
 messages. If `gh` is installed and authenticated, RunHub also queries repo- and
-organization-level runner status. Enterprise runners continue to work with local status
+organisation-level runner status. Enterprise runners continue to work with local status
 only.
 
 Adopted runners and their desired running state are stored in:
@@ -170,6 +186,6 @@ docs/prd/                    Product requirements
 docs/plans/                  Implementation and verification plan
 ```
 
-## License
+## Licence
 
 RunHub is available under the [Apache License 2.0](LICENSE).
