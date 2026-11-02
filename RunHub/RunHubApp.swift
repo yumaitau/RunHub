@@ -26,6 +26,7 @@ struct RunHubApp: App {
 /// hosts the SwiftUI panel, and app termination (the busy-quit confirmation).
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let manager = RunnerManager.shared
+    private let updater = AppUpdater()
 
     private var statusItem: NSStatusItem?
     private let popover = NSPopover()
@@ -48,7 +49,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         popover.behavior = .transient
         popover.contentViewController = NSHostingController(
-            rootView: MenuContentView(manager: manager))
+            rootView: MenuContentView(manager: manager, updater: updater))
 
         // Keep the menu bar icon in sync with runner status.
         manager.$runners
@@ -59,6 +60,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             .store(in: &cancellables)
 
         manager.resumeDesiredRunning()
+        updater.start()
     }
 
     /// True when any runner is actively running a job (Busy).
