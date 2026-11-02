@@ -96,6 +96,26 @@ their descendant processes, read user-selected runner folders, and optionally in
 4. Watch the runner move from Starting to Idle, and then to Busy when it receives a job.
 5. Use the overflow menu to enable **Launch RunHub at login** or quit the app.
 
+RunHub starts after you sign in to macOS, when the login Keychain and GUI session are
+available. It does not start before sign-in at the boot screen.
+
+If macOS requires approval, RunHub opens **System Settings → General → Login Items &
+Extensions** (called **Login Items** on some versions). Enable RunHub under **Open at
+Login**, then return to RunHub. The toggle reflects macOS's current setting. You can
+reopen that panel with **Approve Launch at Login…** in the overflow menu while approval
+is pending, or cancel the request there.
+
+If RunHub does not appear after signing in, confirm that `RunHub.app` is in Applications,
+open that copy, and check its login setting. After moving or replacing the app, turn
+**Launch RunHub at login** off and back on to register the installed copy.
+
+On macOS 27, also check **App Background Activity** in that settings panel if RunHub
+starts and then disappears. RunHub keeps a menu bar icon visible while it supervises
+runners. If macOS treats the app as running without a visible interface and background
+activity is disabled, it can terminate the app, stopping its runners. See Apple's
+[background process guidance](https://developer.apple.com/documentation/appkit/managing-ongoing-background-processes-in-your-mac).
+Use **Login Items Settings…** in RunHub's overflow menu to open the panel.
+
 Removing a runner only untracks it from RunHub. It does not delete the runner folder or
 deregister the runner from GitHub.
 

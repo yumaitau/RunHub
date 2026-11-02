@@ -37,15 +37,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // the UI on shell startup.
         Task.detached(priority: .utility) { _ = LoginShellEnvironment.shared }
 
-        popover.behavior = .transient
-        popover.contentViewController = NSHostingController(
-            rootView: MenuContentView(manager: manager))
-
+        // Establish a visible presence before initialising menu content, which
+        // queries Service Management. Newer macOS versions manage invisible
+        // background apps separately from apps with a menu bar icon.
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         item.button?.target = self
         item.button?.action = #selector(togglePopover(_:))
         statusItem = item
         updateIcon(busy: isAnyBusy(manager.runners))
+
+        popover.behavior = .transient
+        popover.contentViewController = NSHostingController(
+            rootView: MenuContentView(manager: manager))
 
         // Keep the menu bar icon in sync with runner status.
         manager.$runners

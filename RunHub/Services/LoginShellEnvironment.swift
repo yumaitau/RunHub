@@ -23,7 +23,9 @@
 
 import Foundation
 
-enum LoginShellEnvironment {
+// Shell startup performs blocking I/O and must be callable from the detached
+// launch task without inheriting the project's default MainActor isolation.
+nonisolated enum LoginShellEnvironment {
 
     /// The captured login-shell environment, computed once and cached. Falls
     /// back to the current process environment if capture yields no PATH, so a
