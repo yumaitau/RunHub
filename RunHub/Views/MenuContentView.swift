@@ -11,8 +11,7 @@ import AppKit
 
 struct MenuContentView: View {
     @ObservedObject var manager: RunnerManager
-    @State private var loginItem = LoginItem()
-    @State private var launchAtLogin = false
+    @StateObject private var loginItem = LoginItem()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -59,7 +58,15 @@ struct MenuContentView: View {
                 Menu {
                     Link("View on GitHub", destination: projectURL)
                     Divider()
-                    Toggle("Launch RunHub at login", isOn: $launchAtLogin)
+                    Toggle("Launch RunHub at login", isOn: Binding(
+                        get: { loginItem.isEnabled },
+                        set: { setLaunchAtLogin($0) }))
+                    if loginItem.requiresApproval {
+                        Button("Approve Launch at Login…") { loginItem.openLoginItemsSettings() }
+                        Button("Cancel Launch at Login Request") { setLaunchAtLogin(false) }
+                    } else {
+                        Button("Login Items Settings…") { loginItem.openLoginItemsSettings() }
+                    }
                     Divider()
                     Button("Quit RunHub") { NSApp.terminate(nil) }
                 } label: {
@@ -73,8 +80,10 @@ struct MenuContentView: View {
         }
         .padding(12)
         .frame(width: 340)
-        .onAppear { launchAtLogin = loginItem.isEnabled }
-        .onChange(of: launchAtLogin) { _, newValue in setLaunchAtLogin(newValue) }
+        .onAppear { loginItem.refresh() }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            loginItem.refresh()
+        }
         .task { await manager.refreshEnrichment() }
     }
 
@@ -101,11 +110,11 @@ struct MenuContentView: View {
     }
 
     private func setLaunchAtLogin(_ enabled: Bool) {
+        manager.lastMessage = nil
         do {
             if enabled { try loginItem.enable() } else { try loginItem.disable() }
         } catch {
             manager.lastMessage = "Launch-at-login change failed: \(error.localizedDescription)"
-            launchAtLogin = loginItem.isEnabled
         }
     }
 }

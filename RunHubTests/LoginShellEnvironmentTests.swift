@@ -2,14 +2,20 @@
 //  LoginShellEnvironmentTests.swift
 //  RunHubTests
 //
-//  Pins the contract for LoginShellEnvironment.parse: the NUL-delimited `env -0`
-//  parser. RED until parse() is implemented.
+//  Verify environment parsing and the background capture used during app launch.
 //
 
 import Testing
 @testable import RunHub
 
 struct LoginShellEnvironmentTests {
+
+    @Test func environmentCanBeReadFromLaunchBackgroundTask() async {
+        let environment = await Task.detached(priority: .utility) {
+            LoginShellEnvironment.shared
+        }.value
+        #expect(environment["PATH"] != nil)
+    }
 
     @Test func parsesNulDelimitedRecords() {
         let input = "PATH=/opt/homebrew/bin:/usr/bin\u{0}HOME=/Users/josh\u{0}"
