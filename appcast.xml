@@ -1,9 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>RunHub Updates</title>
         <link>https://github.com/yumaitau/RunHub</link>
         <description>Signed updates for RunHub.</description>
         <language>en-au</language>
+        <item>
+            <title>1.2</title>
+            <pubDate>Tue, 03 Nov 2026 11:05:37 +1100</pubDate>
+            <sparkle:version>120</sparkle:version>
+            <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yumaitau/RunHub/releases/download/v1.2/RunHub.zip" length="3328066" type="application/octet-stream" sparkle:edSignature="KOn8LV43A37ka7JsccKkeaQ7PSKDtRTY3GsLdzsBDW0CCzHX1oBl/sjdH/eHZfZw0ASmnHr+VZ7gDSqAZJoxBg=="/>
+        </item>
     </channel>
 </rss>
